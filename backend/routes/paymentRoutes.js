@@ -1,8 +1,9 @@
 // backend/routes/paymentRoutes.js
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middlewares/authMiddleware');
 const { createTransaction, processReturn } = require('../controllers/paymentController');
-const { protect } = require('../middlewares/authMiddleware'); // Si deseas proteger la creación de transacción
+
 
 // Endpoint para iniciar la transacción
 router.post('/transbank/init', protect, createTransaction);

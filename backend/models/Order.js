@@ -21,24 +21,41 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     shippingAddress: {
-      address: { type: String },
-      city: { type: String },
-      postalCode: { type: String },
-      country: { type: String },
+      street: { type: String },
+      houseNumber: { type: String },
+      apartment: { type: String },
+      commune: { type: String },
+      region: { type: String },
     },
-    paymentMethod: { type: String, default: 'Transbank' },
+    shippingMethod: {
+      type: String, // 'pickup' o 'delivery'
+      default: 'pickup',
+    },
+    paymentMethod: {
+      type: String,
+      required: true,
+      default: 'Transbank',
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    isPaid: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    paidAt: {
+      type: Date,
+    },
     paymentResult: {
-      // se puede llenar tras la confirmación de pago
       id: { type: String },
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
     },
-    totalPrice: { type: Number, required: true, default: 0.0 },
-    isPaid: { type: Boolean, required: true, default: false },
-    paidAt: { type: Date },
-  },
-  { timestamps: true }
-);
+  }, { timestamps: true });
+    
 
 module.exports = mongoose.model('Order', orderSchema);

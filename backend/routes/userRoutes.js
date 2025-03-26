@@ -1,7 +1,8 @@
 // backend/routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser } = require('../controllers/userController');
+const { registerUser, loginUser, updateUserProfile } = require('../controllers/userController');
+const { protect } = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
@@ -27,5 +28,6 @@ const { registerUser, loginUser } = require('../controllers/userController');
  */
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.put('/profile', protect, updateUserProfile);
 
 module.exports = router;

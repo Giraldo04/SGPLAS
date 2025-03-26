@@ -73,7 +73,13 @@ const CartPage = () => {
         >
           Vaciar Carrito
         </button>
-        {/* Aquí luego podrías agregar un botón "Ir a Pagar" que te lleve a la pasarela de pago */}
+        {/* BOTÓN PARA IR AL CHECKOUT */}
+        <Link
+          to="/checkout"
+          className="inline-block mt-2 ml-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Finalizar Compra
+        </Link>
       </div>
     </div>
   );

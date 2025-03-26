@@ -6,23 +6,26 @@ const addOrderItems = async (req, res) => {
   try {
     const {
       orderItems,
-      shippingAddress,
+      shippingAddress,   // ahora con subcampos { street, houseNumber, apartment, commune, region }
+      shippingMethod,    // 'pickup' o 'delivery'
       paymentMethod,
       totalPrice,
     } = req.body;
+
 
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: 'No hay items en la orden' });
     }
 
     // Crear la orden
-    const order = new Order({
+   const order = new Order({
       user: req.user._id, // viene del middleware protect
       orderItems,
-      shippingAddress,
+      shippingAddress,   // objeto con { street, houseNumber, ... }
+      shippingMethod,    // 'pickup' o 'delivery'
       paymentMethod,
       totalPrice,
-    });
+    }); 
 
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
@@ -39,6 +42,7 @@ const getMyOrders = async (req, res) => {
       const orders = await Order.find({ user: req.user._id });
       res.json(orders);
     } catch (error) {
+      console.error('Error al obtener las órdenes:', error);
       res.status(500).json({ message: 'Error al obtener las órdenes' });
     }
   };

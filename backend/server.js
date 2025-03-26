@@ -22,6 +22,7 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const adminUserRoutes = require('./routes/adminUserRoutes');
 const productRoutes = require('./routes/productRoutes');
+const deliverySettingsRoutes = require('./routes/deliverySettingsRoutes'); // Agrega esta línea
 
 // Configurar rutas
 app.use('/api/users', userRoutes);
@@ -30,6 +31,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/delivery-settings', deliverySettingsRoutes); // Agrega esta línea
 
 // Integrar Swagger para la documentación de la API
 const { swaggerUi, swaggerDocs } = require('./swagger');

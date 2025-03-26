@@ -21,6 +21,15 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+
+    shippingAddress: {
+      street: { type: String },
+      houseNumber: { type: String },
+      apartment: { type: String },
+      commune: { type: String },
+      region: { type: String },
+    },
+    
   },
   {
     timestamps: true,

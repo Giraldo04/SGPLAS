@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
+
+import ProductDetailPage from './pages/ProductDetailPage';
 import AdminRoute from './components/AdminRoute';
 import AdminProductListPage from './pages/AdminProductListPage';
 import AdminProductCreatePage from './pages/AdminProductCreatePage';
@@ -22,6 +24,8 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import ProfilePage from './pages/ProfilePage';
+import AdminDeliverySettingsPage from './pages/AdminDeliverySettingsPage';
+
 
 function App() {
   return (
@@ -30,7 +34,7 @@ function App() {
         <Router>
           <Header />
           <main className="container mx-auto px-4 py-6">
-            <Routes>
+            <Routes>  
 
               {/* Rutas públicas */}
               <Route path="/" element={<HomePage />} />
@@ -41,13 +45,14 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/productos/:id" element={<ProductDetailPage />} />
               
               {/* RUTAS DE ADMINISTRACION */}
 
               <Route
                 path="/admin/dashboard"
                 element={
-                  <AdminRoute>
+                  <AdminRoute>  
                     <AdminDashboardPage />
                   </AdminRoute>
                 }
@@ -79,6 +84,17 @@ function App() {
                   </AdminRoute>
                 }
               />
+
+              <Route
+                path="/admin/delivery-settings"
+                element={
+                  <AdminRoute>
+                    <AdminDeliverySettingsPage />
+                  </AdminRoute>
+                }
+              />  
+
+              
 
               {/* RUTAS DE ADMINISTRACION PARA ORDENES */}
 

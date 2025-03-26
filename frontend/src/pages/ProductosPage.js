@@ -1,5 +1,6 @@
 // src/pages/ProductosPage.js
 import React, { useEffect, useState, useContext} from 'react';
+import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 
 
@@ -30,12 +31,15 @@ const ProductosPage = () => {
             key={producto._id}
             className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col"
           >
+            
+            <Link to={`/productos/${producto._id}`}>
             <img
               src={producto.image}
               alt={producto.name}
               className="w-full h-48 object-cover rounded"
             />
             <h3 className="mt-4 text-xl font-semibold">{producto.name}</h3>
+            </Link>
             <p className="text-gray-600 mb-2">${producto.price}</p>
             <button
               onClick={() => addToCart(producto)}

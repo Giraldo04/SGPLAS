@@ -62,8 +62,39 @@ const loginUser = async (req, res) => {
   }
 };
 
+const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      // Actualiza shippingAddress si se proporciona
+      if (req.body.shippingAddress) {
+        user.shippingAddress = req.body.shippingAddress;
+      }
+      // Puedes actualizar otros campos si lo deseas (como name o email)
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+
+      const updatedUser = await user.save();
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        shippingAddress: updatedUser.shippingAddress,
+        token: generateToken(updatedUser._id),
+      });
+    } else {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al actualizar perfil:', error);
+    res.status(500).json({ message: 'Error al actualizar perfil' });
+  }
+};
+
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, updateUserProfile };
