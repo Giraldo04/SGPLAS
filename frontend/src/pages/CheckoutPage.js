@@ -12,7 +12,7 @@ const CheckoutPage = () => {
   // Método de envío: 'pickup' o 'delivery'
   const [shippingMethod, setShippingMethod] = useState('pickup');
 
-  // Estado para los campos de la dirección completa
+  // Estado para los campos de la dirección completa (inicialmente vacío)
   const [shippingAddress, setShippingAddress] = useState({
     street: '',
     houseNumber: '',
@@ -43,6 +43,17 @@ const CheckoutPage = () => {
     fetchDeliverySettings();
   }, []);
 
+  // Si el usuario tiene direcciones guardadas, prellenamos el formulario.
+  useEffect(() => {
+    if (userInfo && userInfo.shippingAddresses && userInfo.shippingAddresses.length > 0) {
+      // Buscamos la dirección predeterminada, si existe; si no, usamos la primera.
+      const defaultAddress =
+        userInfo.shippingAddresses.find((addr) => addr.default) ||
+        userInfo.shippingAddresses[0];
+      setShippingAddress(defaultAddress);
+    }
+  }, [userInfo]);
+
   // Costo de envío (si se elige 'delivery')
   const shippingCost =
     shippingMethod === 'delivery' && deliverySettings
@@ -52,12 +63,29 @@ const CheckoutPage = () => {
   // Total con envío incluido
   const totalPrice = subtotal + shippingCost;
 
+  // Construir la dirección final: para "delivery" se usan los campos ingresados (o prellenados)
+  // para "pickup", se usa la dirección de retiro
+  const finalShippingAddress =
+    shippingMethod === 'delivery'
+      ? {
+          street: shippingAddress.street,
+          houseNumber: shippingAddress.houseNumber,
+          apartment: shippingAddress.apartment,
+          commune: shippingAddress.commune,
+          region: shippingAddress.region,
+        }
+      : {
+          street: deliverySettings?.localPickupAddress,
+        };
+
   // Función para crear la orden y luego iniciar el pago
   const handleOrder = async () => {
     if (!userInfo) {
       alert('Debes iniciar sesión para continuar');
       return;
     }
+
+    console.log("Cart items antes de mapear:", cartItems);
 
     // Construir items de la orden
     const orderItems = cartItems.map((item) => ({
@@ -68,22 +96,10 @@ const CheckoutPage = () => {
       product: item._id,
     }));
 
-    // Si se elige 'delivery', usamos los campos del objeto shippingAddress
-    // Si se elige 'pickup', usamos la dirección de retiro de deliverySettings
-    const finalShippingAddress =
-      shippingMethod === 'delivery'
-        ? {
-            street: shippingAddress.street,
-            houseNumber: shippingAddress.houseNumber,
-            apartment: shippingAddress.apartment,
-            commune: shippingAddress.commune,
-            region: shippingAddress.region,
-          }
-        : {
-            street: deliverySettings?.localPickupAddress,
-          };
+    console.log("Order items a enviar:", orderItems);
 
     try {
+      console.log(finalShippingAddress)
       const resOrder = await fetch('http://localhost:5001/api/orders', {
         method: 'POST',
         headers: {
@@ -93,22 +109,17 @@ const CheckoutPage = () => {
         body: JSON.stringify({
           orderItems,
           shippingMethod,
-          shippingAddress: {
-            street: shippingAddress.street,
-            houseNumber: shippingAddress.houseNumber,
-            apartment: shippingAddress.apartment,
-            commune: shippingAddress.commune,
-            region: shippingAddress.region,
-          },
+          shippingAddress: finalShippingAddress, // Enviamos la dirección final
           paymentMethod: 'Transbank',
           totalPrice,
-          
         }),
+        
       });
+      console.log(JSON.stringify({ orderItems,}))
       const orderData = await resOrder.json();
 
       if (resOrder.ok) {
-        clearCart();
+        clearCart();  
         await handlePayment(orderData);
       } else {
         alert(orderData.message || 'Error al crear la orden');
@@ -121,22 +132,30 @@ const CheckoutPage = () => {
 
   // Función para iniciar el pago con Transbank
   const handlePayment = async (order) => {
+    console.log('Order ID en handlePayment:', order._id)
     try {
+      
       const resPayment = await fetch('http://localhost:5001/api/payments/transbank/init', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userInfo.token}`,
+          
         },
         body: JSON.stringify({
-          orderId: order._id,
+          buyOrder: order._id,     // Debe ser un valor único, por ejemplo, el ID de la orden
+          sessionId: userInfo._id,   // ID del usuario o identificador de sesión
           amount: order.totalPrice,
+          
         }),
+        
+        
+        
       });
       const paymentData = await resPayment.json();
 
       if (resPayment.ok) {
-        window.location.href = paymentData.url;
+        window.location.href = paymentData.url + '?token_ws=' + paymentData.token;
       } else {
         alert(paymentData.message || 'Error al iniciar el pago');
       }
@@ -145,6 +164,14 @@ const CheckoutPage = () => {
       setError('Error al iniciar el pago');
     }
   };
+
+  useEffect(() => {
+    if (userInfo && userInfo.shippingAddresses && userInfo.shippingAddresses.length > 0) {
+      // Puedes elegir la dirección predeterminada o la primera
+      const defaultAddress = userInfo.shippingAddresses.find(addr => addr.default) || userInfo.shippingAddresses[0];
+      setShippingAddress(defaultAddress);
+    }
+  }, [userInfo]);
 
   return (
     <div className="container mx-auto py-6">

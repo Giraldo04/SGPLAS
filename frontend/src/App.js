@@ -25,6 +25,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminDeliverySettingsPage from './pages/AdminDeliverySettingsPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 
 
 function App() {
@@ -46,8 +47,11 @@ function App() {
               <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/productos/:id" element={<ProductDetailPage />} />
+              <Route path="/order/:id" element={<OrderDetailPage />} />
               
               {/* RUTAS DE ADMINISTRACION */}
+
+            
 
               <Route
                 path="/admin/dashboard"
@@ -103,6 +107,15 @@ function App() {
                 element={
                   <AdminRoute>
                     <AdminOrderListPage />
+                  </AdminRoute>
+                }
+              />
+
+              <Route
+                path="/admin/order/:id"
+                element={
+                  <AdminRoute>
+                    <OrderDetailPage />
                   </AdminRoute>
                 }
               />

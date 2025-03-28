@@ -66,21 +66,20 @@ const updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (user) {
-      // Actualiza shippingAddress si se proporciona
-      if (req.body.shippingAddress) {
-        user.shippingAddress = req.body.shippingAddress;
-      }
-      // Puedes actualizar otros campos si lo deseas (como name o email)
+      // Actualiza datos básicos
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-
+      // Actualiza el array de direcciones de envío, si se proporciona
+      if (req.body.shippingAddresses) {
+        user.shippingAddresses = req.body.shippingAddresses;
+      }
       const updatedUser = await user.save();
       res.json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
-        shippingAddress: updatedUser.shippingAddress,
+        shippingAddresses: updatedUser.shippingAddresses,
         token: generateToken(updatedUser._id),
       });
     } else {
@@ -91,6 +90,7 @@ const updateUserProfile = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar perfil' });
   }
 };
+
 
 
 const generateToken = (id) => {

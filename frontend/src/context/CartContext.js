@@ -24,6 +24,7 @@ export const CartProvider = ({ children }) => {
 
   // Función para agregar un producto al carrito
   const addToCart = (product) => {
+    console.log("Producto que llega a addToCart:", product);  
     // Verificamos si ya existe en el carrito
     const existItem = cartItems.find((item) => item._id === product._id);
 
@@ -56,7 +57,7 @@ export const CartProvider = ({ children }) => {
       );
     } else {
       // Si la cantidad es 1 o no existe, lo removemos completamente
-      removeFromCart(productId);
+      setCartItems(cartItems.filter(item => item._id !== productId));
     }
   };
 
@@ -71,13 +72,10 @@ export const CartProvider = ({ children }) => {
   };
 
   // Valor que exponemos a los componentes
-  const value = {
-    cartItems,
-    addToCart,
-    removeOneFromCart,
-    removeFromCart,
-    clearCart,
-  };
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  
+  return (
+    <CartContext.Provider value={{ cartItems, addToCart, removeOneFromCart, removeFromCart, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
 };

@@ -1,3 +1,4 @@
+// backend/models/Order.js
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema(
@@ -55,7 +56,8 @@ const orderSchema = new mongoose.Schema(
       update_time: { type: String },
       email_address: { type: String },
     },
-  }, { timestamps: true });
-    
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model('Order', orderSchema);

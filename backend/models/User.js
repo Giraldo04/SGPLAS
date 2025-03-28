@@ -1,39 +1,23 @@
-// backend/models/User.js
 const mongoose = require('mongoose');
+
+const addressSchema = mongoose.Schema({
+  street: { type: String, required: true },
+  houseNumber: { type: String, required: true },
+  apartment: { type: String },
+  commune: { type: String, required: true },
+  region: { type: String, required: true },
+  default: { type: Boolean, default: false }, // Opcional: marca la dirección predeterminada
+});
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, 'El nombre es obligatorio'],
-    },
-    email: {
-      type: String,
-      required: [true, 'El correo es obligatorio'],
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: [true, 'La contraseña es obligatoria'],
-    },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-
-    shippingAddress: {
-      street: { type: String },
-      houseNumber: { type: String },
-      apartment: { type: String },
-      commune: { type: String },
-      region: { type: String },
-    },
-    
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    isAdmin: { type: Boolean, default: false },
+    shippingAddresses: [addressSchema],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('User', userSchema);
