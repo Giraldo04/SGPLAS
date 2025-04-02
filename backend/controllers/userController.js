@@ -100,6 +100,9 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      console.log("Token generado:", token)
+
+      
       return res.json({
         _id: user._id,
         name: user.name,
@@ -107,7 +110,9 @@ const loginUser = async (req, res) => {
         isAdmin: user.isAdmin,
         isVerified: user.isVerified,
         token: generateToken(user._id),
+        
       });
+      
     } else {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }

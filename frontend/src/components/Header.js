@@ -25,8 +25,11 @@ const Header = () => {
           <Link to="/" className="text-gray-600 hover:text-gray-800">
             Inicio
           </Link>
-          <Link to="/productos" className="text-gray-600 hover:text-gray-800">
-            Productos
+          <Link to="/productos/hombres" className="text-gray-600 hover:text-gray-800">
+            Hombres
+          </Link>
+          <Link to="/productos/mujeres" className="text-gray-600 hover:text-gray-800">
+            Mujeres
           </Link>
           <Link to="/cart" className="relative text-gray-600 hover:text-gray-800">
             Carrito

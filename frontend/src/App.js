@@ -26,6 +26,8 @@ import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminDeliverySettingsPage from './pages/AdminDeliverySettingsPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import WomenProductsPage from './pages/WomenProductsPage';
+import MenProductsPage from './pages/MenProductsPage';
 
 
 function App() {
@@ -39,7 +41,8 @@ function App() {
 
               {/* Rutas públicas */}
               <Route path="/" element={<HomePage />} />
-              <Route path="/productos" element={<ProductosPage />} />
+              <Route path="/productos/hombres" element={<MenProductsPage />} />
+              <Route path="/productos/mujeres" element={<WomenProductsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/cart" element={<CartPage />} />

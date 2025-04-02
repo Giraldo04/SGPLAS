@@ -13,6 +13,7 @@ const AdminProductEditPage = () => {
   const [price, setPrice] = useState(0);
   const [countInStock, setCountInStock] = useState(0);
   const [image, setImage] = useState('');
+  const [category, setCategory] = useState('men'); // Valor por defecto
 
   // Cargar los datos actuales del producto
   useEffect(() => {
@@ -25,6 +26,7 @@ const AdminProductEditPage = () => {
         setPrice(data.price);
         setCountInStock(data.countInStock);
         setImage(data.image);
+        setCategory(data.category || 'men'); // Asigna la categoría, si no existe usa "men"
       } catch (error) {
         console.error('Error al cargar el producto:', error);
       }
@@ -43,7 +45,7 @@ const AdminProductEditPage = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userInfo.token}`,
         },
-        body: JSON.stringify({ name, description, price, countInStock, image }),
+        body: JSON.stringify({ name, description, price, countInStock, image, category }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -108,6 +110,17 @@ const AdminProductEditPage = () => {
             className="w-full border rounded p-2 mt-1"
             required
           />
+        </div>
+        <div className="mb-4">
+          <label className="block font-semibold">Categoría</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full border rounded p-2 mt-1"
+          >
+            <option value="men">Hombres</option>
+            <option value="women">Mujeres</option>
+          </select>
         </div>
         <button
           type="submit"

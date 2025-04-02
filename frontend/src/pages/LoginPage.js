@@ -18,6 +18,7 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
+      console.log("Datos de login recibidos:", data);
       if (res.ok) {
         login(data);
         navigate('/');

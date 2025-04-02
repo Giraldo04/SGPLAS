@@ -9,6 +9,7 @@ const AdminProductCreatePage = () => {
   const [price, setPrice] = useState(0);
   const [countInStock, setCountInStock] = useState(0);
   const [image, setImage] = useState('');
+  const [category, setCategory] = useState('men');
   
   const { userInfo } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -23,7 +24,14 @@ const AdminProductCreatePage = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userInfo.token}`,
         },
-        body: JSON.stringify({ name, description, price, countInStock, image }),
+        body: JSON.stringify({
+          name,
+          description,
+          price: Number(price),
+          countInStock: Number(countInStock),
+          image,
+          category, // Se envía la categoría seleccionada
+        }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -37,61 +45,73 @@ const AdminProductCreatePage = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Crear Producto</h2>
+    <div className="max-w-md mx-auto p-4 bg-white rounded shadow mt-10">
+      <h2 className="text-2xl font-bold mb-6">Crear Producto</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block font-semibold">Nombre</label>
-          <input
-            type="text"
-            value={name}
+          <input 
+            type="text" 
+            value={name} 
             onChange={(e) => setName(e.target.value)}
-            className="w-full border rounded p-2 mt-1"
-            required
+            className="w-full border rounded p-2 mt-1" 
+            required 
           />
         </div>
         <div className="mb-4">
           <label className="block font-semibold">Descripción</label>
-          <textarea
-            value={description}
+          <textarea 
+            value={description} 
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded p-2 mt-1"
-            required
-          ></textarea>
+            className="w-full border rounded p-2 mt-1" 
+            required 
+          />
         </div>
         <div className="mb-4">
           <label className="block font-semibold">Precio</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-            className="w-full border rounded p-2 mt-1"
-            required
+          <input 
+            type="number" 
+            value={price} 
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full border rounded p-2 mt-1" 
+            required 
           />
         </div>
         <div className="mb-4">
-          <label className="block font-semibold">Stock</label>
-          <input
-            type="number"
-            value={countInStock}
-            onChange={(e) => setCountInStock(Number(e.target.value))}
-            className="w-full border rounded p-2 mt-1"
-            required
+          <label className="block font-semibold">Cantidad en Stock</label>
+          <input 
+            type="number" 
+            value={countInStock} 
+            onChange={(e) => setCountInStock(e.target.value)}
+            className="w-full border rounded p-2 mt-1" 
+            required 
           />
         </div>
         <div className="mb-4">
-          <label className="block font-semibold">URL de la imagen</label>
-          <input
-            type="text"
-            value={image}
+          <label className="block font-semibold">URL de la Imagen</label>
+          <input 
+            type="text" 
+            value={image} 
             onChange={(e) => setImage(e.target.value)}
-            className="w-full border rounded p-2 mt-1"
-            required
+            className="w-full border rounded p-2 mt-1" 
+            required 
           />
         </div>
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+        <div className="mb-4">
+          <label className="block font-semibold">Categoría</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full border rounded p-2 mt-1"
+            required
+          >
+            <option value="men">Hombres</option>
+            <option value="women">Mujeres</option>
+          </select>
+        </div>
+        <button 
+          type="submit" 
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
           Crear Producto
         </button>

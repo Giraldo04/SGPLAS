@@ -4,10 +4,12 @@ const Product = require('../models/Product');
 // Función para obtener todos los productos
 const getProducts = async (req, res) => {
   try {
-    // Encuentra todos los documentos de la colección "products"
-    const products = await Product.find({});
-    // products será un array, aunque tengas 1 o 0 documentos
-    res.json(products); 
+    let query = {};
+    if (req.query.category) {
+      query.category = req.query.category; // "men" o "women"
+    }
+    const products = await Product.find(query);
+    res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener productos' });
   }
@@ -29,7 +31,10 @@ const getProductById = async (req, res) => {
 
 // Función para crear un producto (se puede restringir a admin)
 const createProduct = async (req, res) => {
+  console.log("Endpoint POST /api/products llamado")
   try {
+    console.log("req.body:", req.body);
+    
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -37,10 +42,12 @@ const createProduct = async (req, res) => {
       countInStock: req.body.countInStock,
       image: req.body.image,
     });
+    console.log("Datos recibidos:", req.body);
 
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (error) {
+    console.error("Error al crear producto:", error);
     res.status(500).json({ message: 'Error al crear el producto' });
   }
 };

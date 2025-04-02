@@ -2,3 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.product-card img {
+    transition: transform 0.3s ease;
+  }
+  
+  .product-card:hover img {
+    transform: scale(1.05);
+  }
+  

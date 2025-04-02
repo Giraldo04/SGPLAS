@@ -39,7 +39,7 @@ const addOrderItems = async (req, res) => {
     return res.status(201).json(createdOrder);
   } catch (error) {
     console.error("Error en addOrderItems:", error);
-    return res.status(500).json({ message: 'Error al crear la orden' });
+    return res.status(500).json({ message: 'Error al crear la orden',  error: error.message  });
   }
 };
 
